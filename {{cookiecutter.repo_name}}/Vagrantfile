@@ -1,0 +1,26 @@
+
+# Specify Vagrant version and Vagrant API version
+Vagrant.require_version ">= 1.6.0"
+VAGRANTFILE_API_VERSION = "2"
+DEFAULT_MEMORY = {{ cookiecutter.default_memory }}
+DEFAULT_CPUS = {{ cookiecutter.default_cpus }}
+
+require 'yaml'
+
+machines = YAML.load_file('machines_definition.yml')
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+
+    machines.each do |machine|
+        config.vm.define machine['name'] do |m|
+            m.vm.box = machine['box']
+            m.vm.network "private_network", ip: machine["ip"]
+
+            m.vm.provider :virtualbox do |vb|
+                vb.memory = machine['memory'] ||= DEFAULT_MEMORY
+                vb.cpus = machine['cpus'] ||= DEFAULT_CPUS
+            end
+        end
+    end
+    
+end

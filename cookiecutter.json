@@ -1,0 +1,13 @@
+{
+  "full_name":"Raul Martinez",
+  "email": "youremail",
+  "repo_name": "vagrant-multimachine-project",
+  "project_short_description": "Vagrant multimachine project",
+  "year": "2016",
+  "default_memory": 512,
+  "default_cpus": 1,
+  "machines": 2,
+  "box": "ubuntu/trusty64",
+  "name": "trusty64",
+  "license": ["MIT", "Apache", "GPLv3", "No License"]
+}

@@ -4,10 +4,13 @@ Vagrant.require_version ">= 1.6.0"
 VAGRANTFILE_API_VERSION = "2"
 DEFAULT_MEMORY = {{ cookiecutter.default_memory }}
 DEFAULT_CPUS = {{ cookiecutter.default_cpus }}
+{% if cookiecutter.provisioning == 'ansible' %}
+DEFAULT_PLAYBOOK = 'playbook.yml'
+{% endif %}
 
 require 'yaml'
 
-machines = YAML.load_file('machines_definition.yml')
+machines = YAML.load_file(Dir.pwd + '/machines_definition.yml')
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
@@ -19,6 +22,20 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
             m.vm.provider :virtualbox do |vb|
                 vb.memory = machine['memory'] ||= DEFAULT_MEMORY
                 vb.cpus = machine['cpus'] ||= DEFAULT_CPUS
+            end
+{% if cookiecutter.provisioning == 'ansible' %}    
+            m.vm.provision :ansible do |ansible| 
+                ansible.playbook = machine['ansible_playbook'] ||= DEFAULT_PLAYBOOK
+                ansible.inventory_path = Dir.pwd + '/inventory'
+                ansible.verbose = 'v'
+                if ENV['ANSIBLE_TAGS'] != '' then
+                    ansible.tags = ENV['ANSIBLE_TAGS']
+                end
+            end
+{% endif %}
+
+            if ENV['ANSIBLE_TAGS'] != '' then
+                ansible.tags = ENV['ANSIBLE_TAGS']
             end
         end
     end

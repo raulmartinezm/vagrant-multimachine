@@ -8,6 +8,7 @@
   "default_cpus": 1,
   "machines": 2,
   "box": "ubuntu/trusty64",
+  "provisioning": ["none", "shell", "ansible"],
   "name": "trusty64",
   "license": ["MIT", "Apache", "GPLv3", "No License"]
 }

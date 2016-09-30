@@ -2,7 +2,7 @@
 {% for number in range(0,cookiecutter.machines|int) %}
 - name: {{cookiecutter.name}}-{{number}}
   box: {{cookiecutter.box}}
- # ram: 1024
- # cpus: 1
   ip: 192.168.33.1{{number}}
+  # memory: 1024
+  # cpus: 1
 {% endfor %}
